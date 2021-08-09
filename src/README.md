@@ -1,12 +1,12 @@
-# libsignal-php
+![axolotl-php](http://cl.ly/image/0h3c171L190A/download/axolotlphp.png)
 
-This is a php port of [libsignal-protocol-java](https://github.com/WhisperSystems/libaxolotl-android) originally written by [Moxie Marlinspike](https://github.com/moxie0)
+This is a php port of [libaxolotl-android](https://github.com/WhisperSystems/libaxolotl-android) originally written by [Moxie Marlinspike](https://github.com/moxie0)
 
 Overview from original author's:
 
  > This is a ratcheting forward secrecy protocol that works in synchronous and asynchronous messaging environments. The protocol overview is available [here](https://github.com/trevp/axolotl/wiki), and the details of the wire format are available [here](https://github.com/trevp/axolotl/wiki).
  
-Read rest of of details [here](https://github.com/signalapp/libsignal-protocol-java/blob/master/README.md).
+Read rest of of details [here](https://github.com/WhisperSystems/libaxolotl-android/blob/master/README.md).
 
 # Overview
 
@@ -50,49 +50,6 @@ State is kept in the following places:
 1. Session State.  Clients will need to maintain the state of the sessions they have established.
 
 
-## Install time
-
-At install time, a libaxolotl client needs to generate its identity keys, registration id, and
-prekeys.
-```php
-    $axolotl = new KeyHelper();
-    $identityKeyPair = $axolotl->generateIdentityKeyPair();
-    $registrationId  = $axolotl->generateRegistrationId();
-    $preKeys         = $axolotl->generatePreKeys(startId, 100);
-    $lastResortKey   = $axolotl->generateLastResortKey();
-    $signedPreKey    = $axolotl->generateSignedPreKey(identityKeyPair, 5);
-
-    // Store $identityKeyPair somewhere durable and safe.
-    // Store $registrationId somewhere durable and safe.
-
-    // Store preKeys in PreKeyStore.
-    // Store signed prekey in SignedPreKeyStore.
-```
-
-## Building a session
-
-A libaxolotl client needs to implement four interfaces: IdentityKeyStore, PreKeyStore, 
-SignedPreKeyStore, and SessionStore.  These will manage loading and storing of identity, 
-prekeys, signed prekeys, and session state.
-
-Once those are implemented, building a session is fairly straightforward:
-```php
-    $sessionStore      = new MySessionStore();
-    $preKeyStore       = new MyPreKeyStore();
-    $signedPreKeyStore = new MySignedPreKeyStore();
-    $identityStore     = new MyIdentityKeyStore();
-
-    // Instantiate a SessionBuilder for a remote recipientId + deviceId tuple.
-    $sessionBuilder = new SessionBuilder($sessionStore, $preKeyStore, $signedPreKeyStore,
-                                                       $identityStore, $recipientId, $deviceId);
-
-    // Build a session with a PreKey retrieved from the server.
-    $sessionBuilder->process($retrievedPreKey);
-
-    $essionCipher = new SessionCipher($sessionStore, $recipientId, $deviceId);
-    $message      = $sessionCipher->encrypt("Hello world!");
-```
-
 # Legal things
 ## Cryptography Notice
 
@@ -102,4 +59,9 @@ See <http://www.wassenaar.org/> for more information.
 
 The U.S. Government Department of Commerce, Bureau of Industry and Security (BIS), has classified this software as Export Commodity Control Number (ECCN) 5D002.C.1, which includes information security software using or performing cryptographic functions with asymmetric algorithms.
 The form and manner of this distribution makes it eligible for export under the License Exception ENC Technology Software Unrestricted (TSU) exception (see the BIS Export Administration Regulations, Section 740.13) for both object code and source code.
+
+## License
+
+Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
+
 
